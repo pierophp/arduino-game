@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import useSound from "use-sound";
-import TitleBar from "./TitleBar";
+import { TitleBar } from "./TitleBar";
 import questionsRaw from "../questions.json";
 import shuffle from "lodash/shuffle";
+import { useSpeech } from "~/hooks/useSpeech";
+import { VolumeIcon as VolumeUp } from "lucide-react";
 
 type Question = {
   question: string;
@@ -19,7 +21,7 @@ function shuffleQuestions(qs: Question[]) {
     q.correctAnswer = q.answers.findIndex((a) => a === correctAnswer);
     return q;
   });
-  console.log(questions);
+
   return questions;
 }
 
@@ -31,10 +33,30 @@ export function BiblicalQuizGame() {
   const [showResult, setShowResult] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
 
-  // Sound effects
   const [playCorrect] = useSound("/audios/correct.mp3");
   const [playIncorrect] = useSound("/audios/incorrect.mp3");
+
+  const { speak, speakSequence, speaking, supported, setVoice } = useSpeech();
+
+  const readQuestionAndOptions = useCallback(() => {
+    if (supported && !showResult) {
+      const textsToSpeak = [
+        questions[currentQuestion].question,
+        ...questions[currentQuestion].answers.map(
+          (answer, index) => `Opção ${index + 1}: ${answer}`
+        ),
+      ];
+      speakSequence(textsToSpeak, 50);
+    }
+  }, [currentQuestion, showResult, speakSequence, supported]);
+
+  useEffect(() => {
+    if (gameStarted) {
+      readQuestionAndOptions();
+    }
+  }, [currentQuestion, gameStarted, readQuestionAndOptions]);
 
   const handleAnswer = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
@@ -43,8 +65,16 @@ export function BiblicalQuizGame() {
     if (answerIndex === questions[currentQuestion].correctAnswer) {
       setScore(score + 1);
       playCorrect();
+      speak("Correto!");
     } else {
       playIncorrect();
+      speak(
+        `Incorreto. A resposta correta é ${
+          questions[currentQuestion].answers[
+            questions[currentQuestion].correctAnswer
+          ]
+        }`
+      );
     }
   };
 
@@ -55,7 +85,14 @@ export function BiblicalQuizGame() {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setShowResult(true);
+      speak(
+        `Questionário concluído! Sua pontuação é ${score} de ${questions.length}`
+      );
     }
+  };
+
+  const startGame = () => {
+    setGameStarted(true);
   };
 
   const restartGame = () => {
@@ -64,31 +101,63 @@ export function BiblicalQuizGame() {
     setShowResult(false);
     setSelectedAnswer(null);
     setShowCorrectAnswer(false);
+    setGameStarted(false);
   };
+
+  const handleVoiceChange = (voice: SpeechSynthesisVoice) => {
+    setVoice(voice);
+  };
+
+  if (!gameStarted) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gray-100">
+        <TitleBar onVoiceChange={handleVoiceChange} />
+        <div className="flex-grow flex flex-col items-center justify-center p-4">
+          <h2 className="text-2xl font-bold mb-4">
+            Bem-vindo ao Questionário Bíblico!
+          </h2>
+          <Button onClick={startGame} className="text-lg px-6 py-3">
+            Iniciar Jogo
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <TitleBar />
+      <TitleBar onVoiceChange={handleVoiceChange} />
       <div className="flex-grow flex flex-col items-center justify-center p-4">
         {showResult ? (
           <div className="text-center">
-            <h2 className="text-2xl font-bold mb-4">Quiz Completed!</h2>
+            <h2 className="text-2xl font-bold mb-4">Questionário Concluído!</h2>
             <p className="text-xl mb-4">
-              Your score: {score} out of {questions.length}
+              Sua pontuação: {score} de {questions.length}
             </p>
-            <Button onClick={restartGame}>Jogue de novo</Button>
+            <Button onClick={restartGame}>Jogar Novamente</Button>
           </div>
         ) : (
           <>
-            <h2 className="text-2xl font-bold mb-4">
-              {questions[currentQuestion].question}
-            </h2>
+            <div className="w-full max-w-2xl mb-6 text-center">
+              <h2 className="text-2xl font-bold mb-2">
+                {questions[currentQuestion].question}
+              </h2>
+              <Button
+                onClick={readQuestionAndOptions}
+                disabled={speaking}
+                aria-label="Ouvir a pergunta e opções novamente"
+                className="mt-2"
+              >
+                <VolumeUp className="w-6 h-6 mr-2" />
+                <span>Ouvir Novamente</span>
+              </Button>
+            </div>
             <div className="grid grid-cols-2 gap-4 mb-4">
               {questions[currentQuestion].answers.map((answer, index) => (
                 <Button
                   key={index}
                   onClick={() => handleAnswer(index)}
-                  className={`w-48 h-16 text-lg ${
+                  className={`w-full h-16 text-lg ${
                     selectedAnswer !== null
                       ? index === questions[currentQuestion].correctAnswer
                         ? "bg-green-500 hover:bg-green-600"
@@ -99,7 +168,7 @@ export function BiblicalQuizGame() {
                   }`}
                   disabled={selectedAnswer !== null}
                 >
-                  {answer}
+                  <span className="mr-2 font-bold">{index + 1}.</span> {answer}
                 </Button>
               ))}
             </div>
@@ -119,7 +188,7 @@ export function BiblicalQuizGame() {
             {selectedAnswer !== null && (
               <Button onClick={goToNextQuestion} className="mt-4">
                 {currentQuestion < questions.length - 1
-                  ? "Próxima pergunta"
+                  ? "Próxima Pergunta"
                   : "Ver Resultados"}
               </Button>
             )}
