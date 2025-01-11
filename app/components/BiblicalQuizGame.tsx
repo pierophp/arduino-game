@@ -4,14 +4,26 @@ import useSound from "use-sound";
 import TitleBar from "./TitleBar";
 import questionsRaw from "../questions.json";
 import shuffle from "lodash/shuffle";
-// Define the structure of our questions
-interface Question {
+
+type Question = {
   question: string;
   answers: string[];
   correctAnswer: number;
+};
+
+function shuffleQuestions(qs: Question[]) {
+  const questions = shuffle(qs);
+  questions.map((q) => {
+    const correctAnswer = q.answers[q.correctAnswer];
+    q.answers = shuffle(q.answers);
+    q.correctAnswer = q.answers.findIndex((a) => a === correctAnswer);
+    return q;
+  });
+  console.log(questions);
+  return questions;
 }
 
-const questions = shuffle(questionsRaw);
+const questions = shuffleQuestions(questionsRaw);
 
 export function BiblicalQuizGame() {
   const [currentQuestion, setCurrentQuestion] = useState(0);

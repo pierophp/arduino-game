@@ -75,11 +75,6 @@
     "correctAnswer": 0
   },
   {
-    "question": "Qual era o nome do gigante que Davi derrotou?",
-    "answers": ["Golias", "Sansão", "Nabucodonosor", "Faraó"],
-    "correctAnswer": 0
-  },
-  {
     "question": "Quem foi o pai de Salomão?",
     "answers": ["Davi", "Saul", "Josias", "Ezequias"],
     "correctAnswer": 0
@@ -110,28 +105,8 @@
     "correctAnswer": 0
   },
   {
-    "question": "Qual era o nome do discípulo que traiu Jesus?",
-    "answers": ["Judas", "Pedro", "João", "Tomé"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Quem foi o profeta que foi engolido por um grande peixe?",
-    "answers": ["Jonas", "Elias", "Isaías", "Jeremias"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Qual era o nome do homem que foi ressuscitado por Jesus?",
-    "answers": ["Lázaro", "Jairo", "Bartimeu", "Nicodemos"],
-    "correctAnswer": 0
-  },
-  {
     "question": "Quem foi o profeta que casou com uma prostituta como símbolo da infidelidade de Israel?",
     "answers": ["Oséias", "Amós", "Miquéias", "Zacarias"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Qual era o nome do rei que lançou Daniel na cova dos leões?",
-    "answers": ["Dario", "Nabucodonosor", "Ciro", "Artaxerxes"],
     "correctAnswer": 0
   },
   {
@@ -195,6 +170,101 @@
     "correctAnswer": 0
   },
   {
+    "question": "Quem foi o profeta que previu o retorno dos judeus do exílio na Babilônia?",
+    "answers": ["Isaías", "Jeremias", "Ezequiel", "Daniel"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o primeiroHomem criado por Deus?",
+    "answers": ["Adão", "Noé", "Abraão", "Moisés"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome da esposa de Adão?",
+    "answers": ["Eva", "Sara", "Rebeca", "Raquel"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o filho mais velho de Adão e Eva?",
+    "answers": ["Caim", "Abel", "Sete", "Enoque"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o pai de Jacó?",
+    "answers": ["Isaac", "Abraão", "Noé", "José"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome da mãe de Samuel?",
+    "answers": ["Ana", "Sara", "Rebeca", "Raquel"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o profeta que confrontou Davi sobre seu pecado com Bate-Seba?",
+    "answers": ["Natã", "Elias", "Eliseu", "Isaías"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do pai de Davi?",
+    "answers": ["Jessé", "Saul", "Salomão", "Josias"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o rei que construiu a cidade de Babilônia?",
+    "answers": ["Nabucodonosor", "Dario", "Ciro", "Artaxerxes"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do discípulo que traiu Jesus?",
+    "answers": ["Judas", "Pedro", "João", "Tomé"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o profeta que foi engolido por um grande peixe?",
+    "answers": ["Jonas", "Elias", "Isaías", "Jeremias"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do homem que foi ressuscitado por Jesus?",
+    "answers": ["Lázaro", "Jairo", "Bartimeu", "Nicodemos"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do rei que lançou Daniel na cova dos leões?",
+    "answers": ["Dario", "Nabucodonosor", "Ciro", "Artaxerxes"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o profeta que foi levado ao céu em uma carruagem de fogo?",
+    "answers": ["Elias", "Eliseu", "Isaías", "Jeremias"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do rei que teve um sonho de uma estátua com cabeça de ouro?",
+    "answers": ["Nabucodonosor", "Dario", "Ciro", "Artaxerxes"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o profeta que interpretou a escrita na parede durante o banquete do rei Belsazar?",
+    "answers": ["Daniel", "José", "Ezequiel", "Jeremias"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do discípulo que era cobrador de impostos antes de seguir Jesus?",
+    "answers": ["Mateus", "Pedro", "João", "Tiago"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o profeta que previu a queda de Nínive?",
+    "answers": ["Naum", "Jonas", "Amós", "Miquéias"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do discípulo que foi chamado de 'o amado'?",
+    "answers": ["João", "Pedro", "Tiago", "André"],
+    "correctAnswer": 0
+  },
+  {
     "question": "Quem foi o profeta que previu a destruição de Jerusalém e o exílio na Babilônia?",
     "answers": ["Jeremias", "Isaías", "Ezequiel", "Daniel"],
     "correctAnswer": 0
@@ -210,8 +280,23 @@
     "correctAnswer": 0
   },
   {
-    "question": "Qual era o nome do discípulo que foi chamado de 'o zelote'?",
-    "answers": ["Simão", "Pedro", "João", "Tiago"],
+    "question": "Quem foi o profeta que previu a queda de Tiro?",
+    "answers": ["Ezequiel", "Isaías", "Jeremias", "Daniel"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do discípulo que era irmão de Pedro?",
+    "answers": ["André", "João", "Tiago", "Tomé"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Quem foi o profeta que previu a queda de Edom?",
+    "answers": ["Obadias", "Amós", "Miquéias", "Zacarias"],
+    "correctAnswer": 0
+  },
+  {
+    "question": "Qual era o nome do discípulo que era irmão de João?",
+    "answers": ["Tiago", "Pedro", "André", "Tomé"],
     "correctAnswer": 0
   }
 ]
