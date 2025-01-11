@@ -1,13 +1,13 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { BiblicalQuizGame } from "~/components/BiblicalQuizGame";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Torta na Cara Bíblico" },
+    { name: "description", content: "Torta na Cara Bíblico!" },
   ];
 }
 
 export default function Home() {
-  return <Welcome />;
+  return <BiblicalQuizGame />;
 }
