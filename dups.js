@@ -24,7 +24,7 @@ let newQuestions = questions;
 for (const dup of dups) {
   console.log(dup);
   const indicesToRemove = findAllButFirstIndices(
-    questions,
+    newQuestions,
     (q) => q.question === dup
   );
 

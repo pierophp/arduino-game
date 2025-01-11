@@ -235,28 +235,8 @@
     "correctAnswer": 0
   },
   {
-    "question": "Qual era o nome do rei que teve um sonho de uma estátua com cabeça de ouro?",
-    "answers": ["Nabucodonosor", "Dario", "Ciro", "Artaxerxes"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Qual era o nome do discípulo que era cobrador de impostos antes de seguir Jesus?",
-    "answers": ["Mateus", "Pedro", "João", "Tiago"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Qual era o nome do discípulo que foi chamado de 'o amado'?",
-    "answers": ["João", "Pedro", "Tiago", "André"],
-    "correctAnswer": 0
-  },
-  {
     "question": "Qual era o nome do discípulo que foi conhecido por sua incredulidade?",
     "answers": ["Tomé", "Pedro", "João", "Tiago"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Quem foi o profeta que previu a queda de Tiro?",
-    "answers": ["Ezequiel", "Isaías", "Jeremias", "Daniel"],
     "correctAnswer": 0
   },
   {
