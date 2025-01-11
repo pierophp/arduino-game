@@ -235,18 +235,8 @@
     "correctAnswer": 0
   },
   {
-    "question": "Quem foi o profeta que foi levado ao céu em uma carruagem de fogo?",
-    "answers": ["Elias", "Eliseu", "Isaías", "Jeremias"],
-    "correctAnswer": 0
-  },
-  {
     "question": "Qual era o nome do rei que teve um sonho de uma estátua com cabeça de ouro?",
     "answers": ["Nabucodonosor", "Dario", "Ciro", "Artaxerxes"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Quem foi o profeta que interpretou a escrita na parede durante o banquete do rei Belsazar?",
-    "answers": ["Daniel", "José", "Ezequiel", "Jeremias"],
     "correctAnswer": 0
   },
   {
@@ -255,18 +245,8 @@
     "correctAnswer": 0
   },
   {
-    "question": "Quem foi o profeta que previu a queda de Nínive?",
-    "answers": ["Naum", "Jonas", "Amós", "Miquéias"],
-    "correctAnswer": 0
-  },
-  {
     "question": "Qual era o nome do discípulo que foi chamado de 'o amado'?",
     "answers": ["João", "Pedro", "Tiago", "André"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Quem foi o profeta que previu a destruição de Jerusalém e o exílio na Babilônia?",
-    "answers": ["Jeremias", "Isaías", "Ezequiel", "Daniel"],
     "correctAnswer": 0
   },
   {
@@ -275,18 +255,8 @@
     "correctAnswer": 0
   },
   {
-    "question": "Quem foi o profeta que previu o retorno dos judeus do exílio na Babilônia?",
-    "answers": ["Isaías", "Jeremias", "Ezequiel", "Daniel"],
-    "correctAnswer": 0
-  },
-  {
     "question": "Quem foi o profeta que previu a queda de Tiro?",
     "answers": ["Ezequiel", "Isaías", "Jeremias", "Daniel"],
-    "correctAnswer": 0
-  },
-  {
-    "question": "Qual era o nome do discípulo que era irmão de Pedro?",
-    "answers": ["André", "João", "Tiago", "Tomé"],
     "correctAnswer": 0
   },
   {
