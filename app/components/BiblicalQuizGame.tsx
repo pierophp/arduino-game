@@ -18,6 +18,7 @@ export function BiblicalQuizGame() {
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
 
   // Sound effects
   const [playCorrect] = useSound("/audios/correct.mp3");
@@ -25,6 +26,7 @@ export function BiblicalQuizGame() {
 
   const handleAnswer = (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
+    setShowCorrectAnswer(true);
 
     if (answerIndex === questions[currentQuestion].correctAnswer) {
       setScore(score + 1);
@@ -32,16 +34,16 @@ export function BiblicalQuizGame() {
     } else {
       playIncorrect();
     }
+  };
 
-    // Move to next question after a short delay
-    setTimeout(() => {
-      setSelectedAnswer(null);
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion(currentQuestion + 1);
-      } else {
-        setShowResult(true);
-      }
-    }, 1000);
+  const goToNextQuestion = () => {
+    setSelectedAnswer(null);
+    setShowCorrectAnswer(false);
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setShowResult(true);
+    }
   };
 
   const restartGame = () => {
@@ -49,6 +51,7 @@ export function BiblicalQuizGame() {
     setScore(0);
     setShowResult(false);
     setSelectedAnswer(null);
+    setShowCorrectAnswer(false);
   };
 
   return (
@@ -68,16 +71,18 @@ export function BiblicalQuizGame() {
             <h2 className="text-2xl font-bold mb-4">
               {questions[currentQuestion].question}
             </h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 mb-4">
               {questions[currentQuestion].answers.map((answer, index) => (
                 <Button
                   key={index}
                   onClick={() => handleAnswer(index)}
                   className={`w-48 h-16 text-lg ${
-                    selectedAnswer === index
+                    selectedAnswer !== null
                       ? index === questions[currentQuestion].correctAnswer
                         ? "bg-green-500 hover:bg-green-600"
-                        : "bg-red-500 hover:bg-red-600"
+                        : selectedAnswer === index
+                        ? "bg-red-500 hover:bg-red-600"
+                        : "bg-blue-500 hover:bg-blue-600"
                       : "bg-blue-500 hover:bg-blue-600"
                   }`}
                   disabled={selectedAnswer !== null}
@@ -86,6 +91,26 @@ export function BiblicalQuizGame() {
                 </Button>
               ))}
             </div>
+            {showCorrectAnswer && (
+              <div className="mb-4 text-center">
+                <p className="text-lg font-semibold">
+                  {selectedAnswer === questions[currentQuestion].correctAnswer
+                    ? "Correto!"
+                    : `Incorreto. A resposta correta é: ${
+                        questions[currentQuestion].answers[
+                          questions[currentQuestion].correctAnswer
+                        ]
+                      }`}
+                </p>
+              </div>
+            )}
+            {selectedAnswer !== null && (
+              <Button onClick={goToNextQuestion} className="mt-4">
+                {currentQuestion < questions.length - 1
+                  ? "Próxima pergunta"
+                  : "Ver Resultados"}
+              </Button>
+            )}
             <p className="mt-4 text-lg">
               Pergunta {currentQuestion + 1} de {questions.length}
             </p>
