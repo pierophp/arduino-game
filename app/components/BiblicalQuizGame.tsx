@@ -5,7 +5,14 @@ import { TitleBar } from "./TitleBar";
 import questionsRaw from "../questions.json";
 import shuffle from "lodash/shuffle";
 import { useSpeech } from "~/hooks/useSpeech";
-import { VolumeIcon as VolumeUp, Play, ArrowRight } from "lucide-react";
+import {
+  VolumeIcon as VolumeUp,
+  Play,
+  Baby,
+  User,
+  ScanFace,
+  ArrowRight,
+} from "lucide-react";
 
 type Question = {
   question: string;
@@ -78,9 +85,10 @@ export function BiblicalQuizGame() {
     }
   };
 
-  const goToNextQuestion = () => {
+  const goToNextQuestion = (level: 1 | 2 | 3) => {
     setSelectedAnswer(null);
     setShowCorrectAnswer(false);
+
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
@@ -186,15 +194,35 @@ export function BiblicalQuizGame() {
               </div>
             )}
             {selectedAnswer !== null && (
-              <Button onClick={goToNextQuestion} className="mt-4">
-                {currentQuestion < questions.length - 1 ? (
-                  <>
-                    Próxima Pergunta <ArrowRight className="w-4 h-4 ml-2" />
-                  </>
-                ) : (
-                  "Ver Resultados"
-                )}
-              </Button>
+              <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+                <h3 className="text-xl font-semibold mb-4 text-center border-b pb-2 flex items-center justify-center gap-2">
+                  <span>Próxima Pergunta</span>
+                  <ArrowRight className="w-5 h-5" />
+                </h3>
+                <div className="flex gap-4">
+                  <Button
+                    onClick={() => goToNextQuestion(1)}
+                    className="flex-1 items-center gap-2 bg-fuchsia-600 hover:bg-fuchsia-700"
+                  >
+                    <Baby className="w-5 h-5" />
+                    Criança
+                  </Button>
+                  <Button
+                    onClick={() => goToNextQuestion(2)}
+                    className="flex-1 items-center gap-2 bg-lime-600 hover:bg-lime-700"
+                  >
+                    <ScanFace className="w-5 h-5" />
+                    Jovem
+                  </Button>
+                  <Button
+                    onClick={() => goToNextQuestion(3)}
+                    className="flex-1 items-center gap-2 bg-sky-600 hover:bg-sky-700"
+                  >
+                    <User className="w-5 h-5" />
+                    Adulto
+                  </Button>
+                </div>
+              </div>
             )}
             <p className="mt-4 text-lg">
               Pergunta {currentQuestion + 1} de {questions.length}
