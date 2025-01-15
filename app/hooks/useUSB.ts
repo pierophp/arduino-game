@@ -14,10 +14,7 @@ export function useUSB(): UseUSBReturn {
 
   const connect = async (): Promise<boolean> => {
     try {
-      const port = await navigator.serial.requestPort({
-        // Add filters if needed
-        // filters: [{ usbVendorId: 0x2341 }] // Example for Arduino
-      });
+      const port = await navigator.serial.requestPort({});
 
       await port.open({
         baudRate: 9600,
