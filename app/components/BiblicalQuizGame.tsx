@@ -13,6 +13,7 @@ import {
   ScanFace,
   ArrowRight,
 } from "lucide-react";
+import { useCommandContext } from "~/providers/CommandProvider";
 
 type Question = {
   question: string;
@@ -35,6 +36,7 @@ function shuffleQuestions(qs: Question[]) {
 const questions = shuffleQuestions(questionsRaw);
 
 export function BiblicalQuizGame() {
+  const { sendCommand } = useCommandContext();
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [showResult, setShowResult] = useState(false);
@@ -65,7 +67,7 @@ export function BiblicalQuizGame() {
     }
   }, [currentQuestion, gameStarted, readQuestionAndOptions]);
 
-  const handleAnswer = (answerIndex: number) => {
+  const handleAnswer = async (answerIndex: number) => {
     setSelectedAnswer(answerIndex);
     setShowCorrectAnswer(true);
 
@@ -73,6 +75,7 @@ export function BiblicalQuizGame() {
       setScore(score + 1);
       playCorrect();
       speak("Correto!");
+      await sendCommand("2");
     } else {
       playIncorrect();
       speak(
@@ -82,12 +85,14 @@ export function BiblicalQuizGame() {
           ]
         }`
       );
+      await sendCommand("3");
     }
   };
 
-  const goToNextQuestion = (level: 1 | 2 | 3) => {
+  const goToNextQuestion = async (level: 1 | 2 | 3) => {
     setSelectedAnswer(null);
     setShowCorrectAnswer(false);
+    await sendCommand("0");
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);

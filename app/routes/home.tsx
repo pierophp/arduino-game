@@ -1,5 +1,6 @@
 import type { Route } from "./+types/home";
 import { BiblicalQuizGame } from "~/components/BiblicalQuizGame";
+import { CommandProvider } from "~/providers/CommandProvider";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -9,5 +10,9 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  return <BiblicalQuizGame />;
+  return (
+    <CommandProvider>
+      <BiblicalQuizGame />
+    </CommandProvider>
+  );
 }
