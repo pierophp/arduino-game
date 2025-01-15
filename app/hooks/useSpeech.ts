@@ -7,7 +7,12 @@ export function useSpeech() {
   const [supported, setSupported] = useState(true);
   const [selectedVoice, setSelectedVoice] =
     useState<SpeechSynthesisVoice | null>(null);
-  const [speed, setSpeed] = useState(1.2);
+  const [speed, setSpeed] = useState(() => {
+    if (typeof window !== "undefined") {
+      return parseFloat(localStorage.getItem("speechSpeed") || "1.2");
+    }
+    return 1;
+  });
 
   useEffect(() => {
     if (typeof window !== "undefined" && !("speechSynthesis" in window)) {
@@ -19,7 +24,6 @@ export function useSpeech() {
     (text: string) => {
       if (!supported) return;
 
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
@@ -52,7 +56,6 @@ export function useSpeech() {
           utterance.lang = "pt-BR";
           utterance.rate = speed; // Set the speed of speech here
           utterance.onend = () => {
-            
             setTimeout(() => {
               index++;
               speakNext();

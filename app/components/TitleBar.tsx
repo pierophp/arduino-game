@@ -5,16 +5,12 @@ import { useCommandContext } from "~/providers/CommandProvider";
 
 interface TitleBarProps {
   onVoiceChange: (voice: SpeechSynthesisVoice) => void;
+  onSpeedChange: (speed: number) => void;
 }
 
-export function TitleBar({ onVoiceChange }: TitleBarProps) {
-  const {
-    connected,
-    connectionType,
-    connectBluetooth,
-    connectUSB,
-    sendCommand,
-  } = useCommandContext();
+export function TitleBar({ onVoiceChange, onSpeedChange }: TitleBarProps) {
+  const { connectionType, connectBluetooth, connectUSB, sendCommand } =
+    useCommandContext();
 
   const handleSendCommand = async (command: string) => {
     const success = await sendCommand(command);
@@ -37,7 +33,7 @@ export function TitleBar({ onVoiceChange }: TitleBarProps) {
           }
         >
           <Bluetooth className="w-4 h-4 mr-2" />
-          {connectionType === "bluetooth" ? "Connected" : "Connect"}
+          {connectionType === "bluetooth" ? "Conectado" : "Conectar"}
         </Button>
 
         <Button
@@ -48,10 +44,13 @@ export function TitleBar({ onVoiceChange }: TitleBarProps) {
           }
         >
           <Usb className="w-4 h-4 mr-2" />
-          {connectionType === "usb" ? "USB Connected" : "Connect USB"}
+          {connectionType === "usb" ? "Conectado" : "Conectar"}
         </Button>
 
-        <VoiceSelector onVoiceChange={onVoiceChange} />
+        <VoiceSelector
+          onVoiceChange={onVoiceChange}
+          onSpeedChange={onSpeedChange}
+        />
       </div>
     </div>
   );
