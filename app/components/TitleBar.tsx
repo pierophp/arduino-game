@@ -1,7 +1,7 @@
-import { VoiceSelector } from "./VoiceSelector";
 import { Button } from "./ui/button";
-import { Bluetooth, Send, Usb } from "lucide-react";
+import { Bluetooth, Usb } from "lucide-react";
 import { useCommandContext } from "~/providers/CommandProvider";
+import { ConfigurationModal } from "./ConfigurationModal";
 
 interface TitleBarProps {
   onVoiceChange: (voice: SpeechSynthesisVoice) => void;
@@ -9,15 +9,7 @@ interface TitleBarProps {
 }
 
 export function TitleBar({ onVoiceChange, onSpeedChange }: TitleBarProps) {
-  const { connectionType, connectBluetooth, connectUSB, sendCommand } =
-    useCommandContext();
-
-  const handleSendCommand = async (command: string) => {
-    const success = await sendCommand(command);
-    if (success) {
-      console.log(`Sent command: ${command}`);
-    }
-  };
+  const { connectionType, connectBluetooth, connectUSB } = useCommandContext();
 
   return (
     <div className="bg-blue-600 text-white p-4 flex justify-between items-center">
@@ -47,7 +39,7 @@ export function TitleBar({ onVoiceChange, onSpeedChange }: TitleBarProps) {
           {connectionType === "usb" ? "Conectado" : "Conectar"}
         </Button>
 
-        <VoiceSelector
+        <ConfigurationModal
           onVoiceChange={onVoiceChange}
           onSpeedChange={onSpeedChange}
         />

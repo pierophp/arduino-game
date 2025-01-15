@@ -75,7 +75,7 @@ export function BiblicalQuizGame() {
       setScore(score + 1);
       playCorrect();
       speak("Correto!");
-      await sendCommand("2");
+      await sendCommand("1");
     } else {
       playIncorrect();
       speak(
@@ -85,7 +85,7 @@ export function BiblicalQuizGame() {
           ]
         }`
       );
-      await sendCommand("3");
+      await sendCommand("2");
     }
   };
 
