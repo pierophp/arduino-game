@@ -5,7 +5,7 @@ import { TitleBar } from "./TitleBar";
 import questionsRaw from "../questions.json";
 import shuffle from "lodash/shuffle";
 import { useSpeech } from "~/hooks/useSpeech";
-import { VolumeIcon as VolumeUp } from "lucide-react";
+import { VolumeIcon as VolumeUp, Play, ArrowRight } from "lucide-react";
 
 type Question = {
   question: string;
@@ -114,10 +114,10 @@ export function BiblicalQuizGame() {
         <TitleBar onVoiceChange={handleVoiceChange} />
         <div className="flex-grow flex flex-col items-center justify-center p-4">
           <h2 className="text-2xl font-bold mb-4">
-            Bem-vindo ao Questionário Bíblico!
+            Bem-vindo ao Torta na Cara Bíblico!
           </h2>
-          <Button onClick={startGame} className="text-lg px-6 py-3">
-            Iniciar Jogo
+          <Button onClick={startGame} className="mt-4">
+            <Play className="w-4 h-4" /> Iniciar Jogo
           </Button>
         </div>
       </div>
@@ -187,9 +187,13 @@ export function BiblicalQuizGame() {
             )}
             {selectedAnswer !== null && (
               <Button onClick={goToNextQuestion} className="mt-4">
-                {currentQuestion < questions.length - 1
-                  ? "Próxima Pergunta"
-                  : "Ver Resultados"}
+                {currentQuestion < questions.length - 1 ? (
+                  <>
+                    Próxima Pergunta <ArrowRight className="w-4 h-4 ml-2" />
+                  </>
+                ) : (
+                  "Ver Resultados"
+                )}
               </Button>
             )}
             <p className="mt-4 text-lg">

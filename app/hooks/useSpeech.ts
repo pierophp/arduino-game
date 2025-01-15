@@ -38,7 +38,7 @@ export function useSpeech() {
   const speakSequence = useCallback(
     (texts: string[], pauseDuration: number = 300) => {
       if (!supported) return;
-
+      setSpeaking(true);
       // Cancel any ongoing speech
       window.speechSynthesis.cancel();
 
@@ -51,15 +51,16 @@ export function useSpeech() {
           }
           utterance.lang = "pt-BR";
           utterance.rate = speed; // Set the speed of speech here
-          utterance.onstart = () => setSpeaking(true);
           utterance.onend = () => {
-            setSpeaking(false);
+            
             setTimeout(() => {
               index++;
               speakNext();
             }, pauseDuration);
           };
           window.speechSynthesis.speak(utterance);
+        } else {
+          setSpeaking(false);
         }
       };
       speakNext();

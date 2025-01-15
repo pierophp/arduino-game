@@ -13,6 +13,12 @@ interface VoiceSelectorProps {
 
 export function VoiceSelector({ onVoiceChange }: VoiceSelectorProps) {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [selectedVoice, setSelectedVoice] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("selectedVoice") || "";
+    }
+    return "";
+  });
 
   useEffect(() => {
     function loadVoices() {
@@ -21,6 +27,14 @@ export function VoiceSelector({ onVoiceChange }: VoiceSelectorProps) {
         voice.lang.startsWith("pt")
       );
       setVoices(portugueseVoices);
+      
+      const savedVoice = localStorage.getItem("selectedVoice");
+      if (savedVoice) {
+        const voice = portugueseVoices.find((v) => v.name === savedVoice);
+        if (voice) {
+          onVoiceChange(voice);
+        }
+      }
     }
 
     loadVoices();
@@ -33,11 +47,13 @@ export function VoiceSelector({ onVoiceChange }: VoiceSelectorProps) {
         window.speechSynthesis.onvoiceschanged = null;
       }
     };
-  }, []);
+  }, [onVoiceChange]);
 
   const handleVoiceChange = (voiceName: string) => {
     const selectedVoice = voices.find((voice) => voice.name === voiceName);
     if (selectedVoice) {
+      localStorage.setItem("selectedVoice", voiceName);
+      setSelectedVoice(voiceName);
       onVoiceChange(selectedVoice);
     }
   };
@@ -47,7 +63,7 @@ export function VoiceSelector({ onVoiceChange }: VoiceSelectorProps) {
   }
 
   return (
-    <Select onValueChange={handleVoiceChange}>
+    <Select onValueChange={handleVoiceChange} value={selectedVoice}>
       <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Selecionar voz" />
       </SelectTrigger>
