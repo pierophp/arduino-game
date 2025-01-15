@@ -1,8 +1,7 @@
 import { VoiceSelector } from "./VoiceSelector";
 import { Button } from "./ui/button";
-import { useBluetooth } from "~/hooks/useBluetooth";
 import { Bluetooth, Send, Usb } from "lucide-react";
-import { useUSB } from "~/hooks/useUSB";
+import { useCommand } from "~/hooks/useCommand";
 
 interface TitleBarProps {
   onVoiceChange: (voice: SpeechSynthesisVoice) => void;
@@ -10,34 +9,17 @@ interface TitleBarProps {
 
 export function TitleBar({ onVoiceChange }: TitleBarProps) {
   const {
-    connected: bluetoothConnected,
-    connect: connectBluetooth,
-    sendCommand: sendBluetoothCommand,
-  } = useBluetooth();
-  const {
-    connected: usbConnected,
-    connect: connectUSB,
-    sendCommand: sendUSBCommand,
-  } = useUSB();
-
-  const handleConnect = async () => {
-    const success = await connectBluetooth();
-    if (success) {
-      console.log("Connected via bluetooth");
-    }
-  };
+    connected,
+    connectionType,
+    connectBluetooth,
+    connectUSB,
+    sendCommand,
+  } = useCommand();
 
   const handleSendCommand = async (command: string) => {
-    const success = await sendUSBCommand(command);
+    const success = await sendCommand(command);
     if (success) {
       console.log(`Sent command: ${command}`);
-    }
-  };
-
-  const handleUsbConnect = async () => {
-    const success = await connectUSB();
-    if (success) {
-      console.log("Connected via USB");
     }
   };
 
@@ -47,25 +29,29 @@ export function TitleBar({ onVoiceChange }: TitleBarProps) {
       <div className="flex items-center gap-4">
         <Button
           variant="secondary"
-          onClick={handleConnect}
+          onClick={connectBluetooth}
           className={
-            bluetoothConnected ? "bg-green-500 hover:bg-green-600" : ""
+            connectionType === "bluetooth"
+              ? "bg-green-500 hover:bg-green-600"
+              : ""
           }
         >
           <Bluetooth className="w-4 h-4 mr-2" />
-          {bluetoothConnected ? "Connected" : "Connect"}
+          {connectionType === "bluetooth" ? "Connected" : "Connect"}
         </Button>
 
         <Button
           variant="secondary"
-          onClick={handleUsbConnect}
-          className={usbConnected ? "bg-green-500 hover:bg-green-600" : ""}
+          onClick={connectUSB}
+          className={
+            connectionType === "usb" ? "bg-green-500 hover:bg-green-600" : ""
+          }
         >
           <Usb className="w-4 h-4 mr-2" />
-          {usbConnected ? "USB Connected" : "Connect USB"}
+          {connectionType === "usb" ? "USB Connected" : "Connect USB"}
         </Button>
 
-        {usbConnected && (
+        {connected && (
           <>
             <Button variant="secondary" onClick={() => handleSendCommand("2")}>
               <Send className="w-4 h-4 mr-2" />
