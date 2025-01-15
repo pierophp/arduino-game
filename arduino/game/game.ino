@@ -13,10 +13,11 @@ const int redPin = 3;
 // Servo
 const int servoPin = 5;
 const bool servoEnabled = true;
-const int servoInitialPos = 10;
-const int servoFinalPos = 80;
+const int servoInitialPos = 20;
+const int servoFinalPos = 90;
 
-void setup() {
+void setup()
+{
   bluetooth.begin(38400);
   Serial.begin(9600);
   Serial.println("Program started");
@@ -25,34 +26,45 @@ void setup() {
   servo.attach(servoPin);
 }
 
-
-void loop() {
-  if (Serial.available()) {
+void loop()
+{
+  if (Serial.available())
+  {
     data = Serial.read();
     Serial.println(data);
   }
 
-  if (bluetooth.available()) {
-      data = bluetooth.read();     
-      Serial.println(data);
-  } 
-
-  if (data == '0') {
-      digitalWrite(greenPin, LOW);
-      digitalWrite(redPin, LOW);
-      servo.write(servoInitialPos);
+  if (bluetooth.available())
+  {
+    data = bluetooth.read();
+    Serial.println(data);
   }
 
-  if (data == '1') {
-      digitalWrite(greenPin, HIGH);
+  if (data == '0')
+  {
+    digitalWrite(greenPin, LOW);
+    digitalWrite(redPin, LOW);
+
+    for (int pos = servo.read(); pos >= servoInitialPos; pos--)
+    {
+      servo.write(pos);
+      delay(5);
+    }
   }
 
-  if (data == '2') {
-      digitalWrite(redPin, HIGH);
-      if (servoEnabled) {
-        servo.write(servoFinalPos);
-      }
-  }  
+  if (data == '1')
+  {
+    digitalWrite(greenPin, HIGH);
+  }
+
+  if (data == '2')
+  {
+    digitalWrite(redPin, HIGH);
+    if (servoEnabled)
+    {
+      servo.write(servoFinalPos);
+    }
+  }
 
   delay(100);
 }
