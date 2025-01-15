@@ -1,26 +1,43 @@
 import { VoiceSelector } from "./VoiceSelector";
 import { Button } from "./ui/button";
 import { useBluetooth } from "~/hooks/useBluetooth";
-import { Bluetooth, Send } from "lucide-react";
+import { Bluetooth, Send, Usb } from "lucide-react";
+import { useUSB } from "~/hooks/useUSB";
 
 interface TitleBarProps {
   onVoiceChange: (voice: SpeechSynthesisVoice) => void;
 }
 
 export function TitleBar({ onVoiceChange }: TitleBarProps) {
-  const { connected, connect, sendCommand } = useBluetooth();
+  const {
+    connected: bluetoothConnected,
+    connect: connectBluetooth,
+    sendCommand: sendBluetoothCommand,
+  } = useBluetooth();
+  const {
+    connected: usbConnected,
+    connect: connectUSB,
+    sendCommand: sendUSBCommand,
+  } = useUSB();
 
   const handleConnect = async () => {
-    const success = await connect();
+    const success = await connectBluetooth();
     if (success) {
-      console.log('Connected via bluetooth');
+      console.log("Connected via bluetooth");
     }
   };
 
   const handleSendCommand = async (command: string) => {
-    const success = await sendCommand(command);
+    const success = await sendUSBCommand(command);
     if (success) {
       console.log(`Sent command: ${command}`);
+    }
+  };
+
+  const handleUsbConnect = async () => {
+    const success = await connectUSB();
+    if (success) {
+      console.log("Connected via USB");
     }
   };
 
@@ -31,13 +48,24 @@ export function TitleBar({ onVoiceChange }: TitleBarProps) {
         <Button
           variant="secondary"
           onClick={handleConnect}
-          className={connected ? "bg-green-500 hover:bg-green-600" : ""}
+          className={
+            bluetoothConnected ? "bg-green-500 hover:bg-green-600" : ""
+          }
         >
           <Bluetooth className="w-4 h-4 mr-2" />
-          {connected ? "Connected" : "Connect"}
+          {bluetoothConnected ? "Connected" : "Connect"}
         </Button>
-        
-        {connected && (
+
+        <Button
+          variant="secondary"
+          onClick={handleUsbConnect}
+          className={usbConnected ? "bg-green-500 hover:bg-green-600" : ""}
+        >
+          <Usb className="w-4 h-4 mr-2" />
+          {usbConnected ? "USB Connected" : "Connect USB"}
+        </Button>
+
+        {usbConnected && (
           <>
             <Button variant="secondary" onClick={() => handleSendCommand("2")}>
               <Send className="w-4 h-4 mr-2" />
@@ -49,7 +77,7 @@ export function TitleBar({ onVoiceChange }: TitleBarProps) {
             </Button>
           </>
         )}
-        
+
         <VoiceSelector onVoiceChange={onVoiceChange} />
       </div>
     </div>
