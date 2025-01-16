@@ -22,6 +22,39 @@ type Question = {
   correctAnswer: number;
 };
 
+const rightAnswerPhrases = [
+  "Correto!",
+  "Parabéns!",
+  "Muito bem!",
+  "Excelente!",
+  "Você está fazendo muito progrresso!",
+  "Você acertou em cheio!",
+  "Ótimo trabalho, continue assim!",
+  "Você está arrasando!",
+  "Incrível!",
+  "Muito bom, você está se saindo muito bem!",
+  "Você está indo muito bem!",
+  "Impressionante!",
+  "Show de bola!",
+  "Continue assim!",
+  "Você fez isso parecer fácil!",
+  "Isso mesmo!",
+  "Uau!",
+];
+
+const wrongAnswerPhrases = [
+  "Incorreto! Continue estudando!",
+  "Incorreto! Não desista!",
+  "Boa tentativa!",
+  "Tente mais uma vez.",
+  "Foi por pouco!",
+  "Está quase! Continue firme!",
+  "Não foi dessa vez, mas você vai chegar lá!",
+  "Tente novamente, você está quase lá!",
+  "Vai ser na próxima! Não desanime!",
+  "Erro é parte do aprendizado. Vamos tentar mais uma?",
+];
+
 function shuffleQuestions(qs: Question[]) {
   const questions = shuffle(qs);
   questions.map((q) => {
@@ -90,18 +123,31 @@ export function BiblicalQuizGame() {
     if (answerIndex === questions[currentQuestion].correctAnswer) {
       setScore(score + 1);
       playCorrect();
-      speak("Correto!");
       await sendCommand("1");
+
+      const randomRightPhrase =
+        rightAnswerPhrases[
+          Math.floor(Math.random() * rightAnswerPhrases.length)
+        ];
+
+      await speak(randomRightPhrase);
     } else {
       playIncorrect();
-      speak(
-        `Incorreta. A resposta correta é ${
+
+      await sendCommand("2");
+
+      const randomWrongPhrase =
+        wrongAnswerPhrases[
+          Math.floor(Math.random() * wrongAnswerPhrases.length)
+        ];
+
+      await speak(
+        `${randomWrongPhrase} A resposta correta é ${
           questions[currentQuestion].answers[
             questions[currentQuestion].correctAnswer
           ]
         }`
       );
-      await sendCommand("2");
     }
   };
 
