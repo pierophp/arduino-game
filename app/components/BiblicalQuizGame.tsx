@@ -5,23 +5,21 @@ import { TitleBar } from "./TitleBar";
 import questionsRaw from "../questions.json";
 import shuffle from "lodash/shuffle";
 import { useSpeech } from "~/hooks/useSpeech";
-import {
-  VolumeIcon as VolumeUp,
-  Play,
-  Baby,
-  User,
-  ScanFace,
-  ArrowRight,
-} from "lucide-react";
+import { VolumeIcon as VolumeUp, ArrowRight } from "lucide-react";
 import { useCommandContext } from "~/providers/CommandProvider";
 import { AiSpeaking } from "./AiSpeaking.client";
+import { ChildButton } from "./buttons/ChildButton";
+import { TeenButton } from "./buttons/TeenButton";
+import { AdultButton } from "./buttons/AdultButton";
+
+type Level = 1 | 2 | 3 | 4;
 
 type Question = {
   id: number;
   question: string;
   answers: string[];
   correctAnswer: number;
-  level: 1 | 2 | 3 | 4;
+  level: Level;
 };
 
 const rightAnswerPhrases = [
@@ -80,11 +78,49 @@ const seeAnswerPhrases = [
 
 const youChoosePhrases = ["Você escolheu", "Sua resposta foi"];
 
+const SHOWN_QUESTIONS_KEY = "shownQuestions";
+
+interface ShownQuestions {
+  [level: number]: number[];
+}
+
+function getShownQuestions(): ShownQuestions {
+  const stored = localStorage.getItem(SHOWN_QUESTIONS_KEY);
+  return stored ? JSON.parse(stored) : { 1: [], 2: [], 3: [], 4: [] };
+}
+
+function addShownQuestion(level: number, questionId: number) {
+  const shown = getShownQuestions();
+  shown[level] = [...(shown[level] || []), questionId];
+  localStorage.setItem(SHOWN_QUESTIONS_KEY, JSON.stringify(shown));
+}
+
+function resetShownQuestions() {
+  localStorage.setItem(
+    SHOWN_QUESTIONS_KEY,
+    JSON.stringify({ 1: [], 2: [], 3: [], 4: [] })
+  );
+}
+
+function getAvailableQuestions(
+  level: number,
+  allQuestions: Question[]
+): Question[] {
+  const shown = getShownQuestions();
+  const shownIds = shown[level] || [];
+  return allQuestions.filter(
+    (q) => q.level === level && !shownIds.includes(q.id)
+  );
+}
+
 function shuffleQuestions(qs: any[]): Question[] {
+  qs.map((q, index) => {
+    q.id = index;
+  });
+
   const questions = shuffle(qs);
   questions.map((q, index) => {
     const correctAnswer = q.answers[q.correctAnswer];
-    q.id = index;
     q.answers = shuffle(q.answers);
     q.correctAnswer = q.answers.findIndex((a) => a === correctAnswer);
     return q;
@@ -133,6 +169,11 @@ export function BiblicalQuizGame() {
   const handleAnswer = async (answerIndex: number) => {
     setIsProcessingAnswer(true);
     setSelectedAnswer(answerIndex);
+
+    addShownQuestion(
+      questions[currentQuestion].level,
+      questions[currentQuestion].id
+    );
 
     const randomSeePhrase =
       seeAnswerPhrases[Math.floor(Math.random() * seeAnswerPhrases.length)];
@@ -183,21 +224,44 @@ export function BiblicalQuizGame() {
     }
   };
 
-  const goToNextQuestion = async (level: 1 | 2 | 3 | 4) => {
+  const goToNextQuestion = async (level: Level) => {
     setSelectedAnswer(null);
     setShowCorrectAnswer(false);
     await sendCommand("0");
 
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+    const availableQuestions = getAvailableQuestions(level, questions);
+
+    if (availableQuestions.length === 0) {
+      const shown = getShownQuestions();
+      shown[level] = [];
+      localStorage.setItem(SHOWN_QUESTIONS_KEY, JSON.stringify(shown));
+
+      const newAvailableQuestions = getAvailableQuestions(level, questions);
+
+      if (newAvailableQuestions.length === 0) {
+        setShowResult(true);
+        await speak(`Não há mais perguntas disponíveis para este nível`);
+        return;
+      }
+    }
+
+    const nextQuestion =
+      availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+    const nextQuestionIndex = questions.findIndex(
+      (q) => q.id === nextQuestion.id
+    );
+
+    if (nextQuestionIndex !== -1) {
+      setCurrentQuestion(nextQuestionIndex);
     } else {
       setShowResult(true);
       await speak(`A pontuação foi ${score} de ${questions.length}`);
     }
   };
 
-  const startGame = () => {
+  const startGame = (level: Level) => {
     setGameStarted(true);
+    goToNextQuestion(level);
   };
 
   const restartGame = () => {
@@ -207,6 +271,7 @@ export function BiblicalQuizGame() {
     setSelectedAnswer(null);
     setShowCorrectAnswer(false);
     setGameStarted(false);
+    resetShownQuestions();
   };
 
   const handleVoiceChange = (voice: SpeechSynthesisVoice) => {
@@ -225,12 +290,16 @@ export function BiblicalQuizGame() {
           onSpeedChange={handleSpeedChange}
         />
         <div className="flex-grow flex flex-col items-center justify-center p-4">
-          <h2 className="text-2xl font-bold mb-4">
-            Bem-vindo ao Torta na Cara Bíblico!
-          </h2>
-          <Button onClick={startGame} className="mt-4">
-            <Play className="w-4 h-4" /> Iniciar Jogo
-          </Button>
+          <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+            <h3 className="text-xl font-semibold mb-4 text-center border-b pb-2 flex items-center justify-center gap-2">
+              <span>Iniciar Jogo</span>
+            </h3>
+            <div className="flex gap-4">
+              <ChildButton onClick={() => startGame(1)} />
+              <TeenButton onClick={() => startGame(2)} />
+              <AdultButton onClick={() => startGame(3)} />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -313,33 +382,12 @@ export function BiblicalQuizGame() {
                   <ArrowRight className="w-5 h-5" />
                 </h3>
                 <div className="flex gap-4">
-                  <Button
-                    onClick={() => goToNextQuestion(1)}
-                    className="flex-1 items-center gap-2 bg-fuchsia-600 hover:bg-fuchsia-700"
-                  >
-                    <Baby className="w-5 h-5" />
-                    Criança
-                  </Button>
-                  <Button
-                    onClick={() => goToNextQuestion(2)}
-                    className="flex-1 items-center gap-2 bg-lime-600 hover:bg-lime-700"
-                  >
-                    <ScanFace className="w-5 h-5" />
-                    Jovem
-                  </Button>
-                  <Button
-                    onClick={() => goToNextQuestion(3)}
-                    className="flex-1 items-center gap-2 bg-sky-600 hover:bg-sky-700"
-                  >
-                    <User className="w-5 h-5" />
-                    Adulto
-                  </Button>
+                  <ChildButton onClick={() => goToNextQuestion(1)} />
+                  <TeenButton onClick={() => goToNextQuestion(2)} />
+                  <AdultButton onClick={() => goToNextQuestion(3)} />
                 </div>
               </div>
             )}
-            <p className="mt-4 text-lg">
-              Pergunta {currentQuestion + 1} de {questions.length}
-            </p>
           </>
         )}
       </div>
