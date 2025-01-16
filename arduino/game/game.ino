@@ -6,6 +6,7 @@ Servo servo;
 SoftwareSerial bluetooth(10, 11);
 
 char data;
+
 // Led
 const int greenPin = 2;
 const int redPin = 3;
@@ -45,12 +46,7 @@ void loop()
   {
     digitalWrite(greenPin, LOW);
     digitalWrite(redPin, LOW);
-
-    for (int pos = servo.read(); pos >= servoInitialPos; pos--)
-    {
-      servo.write(pos);
-      delay(5);
-    }
+    setServoToInitialPosition();
   }
 
   if (data == '1')
@@ -65,13 +61,18 @@ void loop()
     {
       servo.write(servoFinalPos);
       delay(1000);
-      for (int pos = servo.read(); pos >= servoInitialPos; pos--)
-      {
-        servo.write(pos);
-        delay(5);
-      }
+      setServoToInitialPosition();
     }
   }
 
   delay(100);
+}
+
+void setServoToInitialPosition() {
+  if (!servoEnabled) return;
+  
+  for (int pos = servo.read(); pos >= servoInitialPos; pos--) {
+    servo.write(pos);
+    delay(5);
+  }
 }
