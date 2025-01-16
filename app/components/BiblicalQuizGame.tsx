@@ -20,6 +20,7 @@ type Question = {
   question: string;
   answers: string[];
   correctAnswer: number;
+  level: 1 | 2 | 3 | 4;
 };
 
 const rightAnswerPhrases = [
@@ -39,7 +40,11 @@ const rightAnswerPhrases = [
   "Continue assim!",
   "Você fez isso parecer fácil!",
   "Isso mesmo!",
-  "Uau!",
+  "Acertou! Acho que você andou estudando com Salomão.",
+  "Incrível! Davi não acertava tão bem nem com a funda.",
+  "Parabéns! Você desvendou mais um mistério bíblico!",
+  "Resposta certa! Você deve estar prestando atenção na reunião!",
+  "Resposta certa! Você deve estar lendo a bíblia todo dia!",
 ];
 
 const wrongAnswerPhrases = [
@@ -66,10 +71,13 @@ const seeAnswerPhrases = [
   "Vamos ver se você mandou bem!",
   "Chegou o momento da verdade!",
   "Está na hora de descobrir sua resposta!",
+  "Vamos ver se você está mandando bem!",
   "Será que você acertou? Vamos conferir!",
   "Hora de saber se você está no caminho certo!",
-  "Vamos ver se você está mandando bem!",
+  "Vamos descobrir se sua resposta é tão certeira quanto a funda de Davi!",
 ];
+
+const youChoosePhrases = ["Você escolheu", "Sua resposta foi"];
 
 function shuffleQuestions(qs: Question[]) {
   const questions = shuffle(qs);
@@ -97,7 +105,7 @@ export function BiblicalQuizGame() {
 
   const [playCorrect] = useSound("/audios/correct.mp3");
   const [playIncorrect] = useSound("/audios/incorrect.mp3");
-  const [playFrumRoll] = useSound("/audios/drum_roll.mp3");
+  const [playDrumRoll] = useSound("/audios/drum_roll.mp3");
 
   const { speak, speakSequence, speaking, supported, setVoice, setSpeed } =
     useSpeech();
@@ -110,7 +118,7 @@ export function BiblicalQuizGame() {
           (answer, index) => `Opção ${index + 1}: ${answer}`
         ),
       ];
-      speakSequence(textsToSpeak, 50);
+      speakSequence(textsToSpeak, 0);
     }
   }, [currentQuestion, showResult, speakSequence, supported]);
 
@@ -127,12 +135,15 @@ export function BiblicalQuizGame() {
     const randomSeePhrase =
       seeAnswerPhrases[Math.floor(Math.random() * seeAnswerPhrases.length)];
 
+    const randomYouChoosePhrase =
+      youChoosePhrases[Math.floor(Math.random() * youChoosePhrases.length)];
+
     await speak(
-      `Você escolheu ${questions[currentQuestion].answers[answerIndex]}. ${randomSeePhrase}`,
+      `${randomYouChoosePhrase} ${questions[currentQuestion].answers[answerIndex]}. ${randomSeePhrase}`,
       true
     );
 
-    playFrumRoll();
+    playDrumRoll();
 
     await new Promise((resolve) => setTimeout(resolve, 4000));
 
@@ -170,7 +181,7 @@ export function BiblicalQuizGame() {
     }
   };
 
-  const goToNextQuestion = async (level: 1 | 2 | 3) => {
+  const goToNextQuestion = async (level: 1 | 2 | 3 | 4) => {
     setSelectedAnswer(null);
     setShowCorrectAnswer(false);
     await sendCommand("0");
@@ -179,9 +190,7 @@ export function BiblicalQuizGame() {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       setShowResult(true);
-      speak(
-        `Questionário concluído! Sua pontuação é ${score} de ${questions.length}`
-      );
+      await speak(`A pontuação foi ${score} de ${questions.length}`);
     }
   };
 

@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect, useCallback } from "react";
 
 export function useSpeech() {
@@ -27,6 +25,9 @@ export function useSpeech() {
       const voice = voices.find((voice) => voice.name === savedVoiceName);
       if (voice) {
         setSelectedVoice(voice);
+        const warmUp = new SpeechSynthesisUtterance("");
+        warmUp.voice = voice;
+        speechSynthesis.speak(warmUp);
       }
     };
   }
@@ -50,6 +51,7 @@ export function useSpeech() {
           setSpeaking(false);
           resolve();
         };
+
         window.speechSynthesis.speak(utterance);
 
         if (!waitForCompletion) {
