@@ -43,6 +43,7 @@ export function BiblicalQuizGame() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
+  const [isProcessingAnswer, setIsProcessingAnswer] = useState(false);
 
   const [playCorrect] = useSound("/audios/correct.mp3");
   const [playIncorrect] = useSound("/audios/incorrect.mp3");
@@ -69,6 +70,11 @@ export function BiblicalQuizGame() {
   }, [currentQuestion, gameStarted, readQuestionAndOptions]);
 
   const handleAnswer = async (answerIndex: number) => {
+    setIsProcessingAnswer(true);
+    setSelectedAnswer(answerIndex);
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     await speak(
       `Você escolheu a resposta: "${questions[currentQuestion].answers[answerIndex]}". Será que está correta?`,
       true
@@ -76,9 +82,8 @@ export function BiblicalQuizGame() {
 
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    setSelectedAnswer(answerIndex);
-
     setShowCorrectAnswer(true);
+    setIsProcessingAnswer(false);
 
     if (answerIndex === questions[currentQuestion].correctAnswer) {
       setScore(score + 1);
@@ -130,7 +135,7 @@ export function BiblicalQuizGame() {
     setVoice(voice);
   };
 
-  const handleSpeedChange = (speed: SpeechSynthesisspeed) => {
+  const handleSpeedChange = (speed: number) => {
     setSpeed(speed);
   };
 
@@ -190,15 +195,18 @@ export function BiblicalQuizGame() {
                   key={index}
                   onClick={() => handleAnswer(index)}
                   className={`w-full h-16 text-lg ${
-                    selectedAnswer !== null
-                      ? index === questions[currentQuestion].correctAnswer
+                    isProcessingAnswer && selectedAnswer === index
+                      ? "bg-yellow-500 hover:bg-yellow-600 pulse"
+                      : selectedAnswer !== null
+                      ? !isProcessingAnswer &&
+                        index === questions[currentQuestion].correctAnswer
                         ? "bg-green-500 hover:bg-green-600"
-                        : selectedAnswer === index
+                        : !isProcessingAnswer && selectedAnswer === index
                         ? "bg-red-500 hover:bg-red-600"
                         : "bg-blue-500 hover:bg-blue-600"
                       : "bg-blue-500 hover:bg-blue-600"
                   }`}
-                  disabled={selectedAnswer !== null}
+                  disabled={selectedAnswer !== null || isProcessingAnswer}
                 >
                   <span className="mr-2 font-bold">{index + 1}.</span> {answer}
                 </Button>
@@ -217,7 +225,7 @@ export function BiblicalQuizGame() {
                 </p>
               </div>
             )}
-            {selectedAnswer !== null && (
+            {selectedAnswer !== null && !isProcessingAnswer && (
               <div className="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
                 <h3 className="text-xl font-semibold mb-4 text-center border-b pb-2 flex items-center justify-center gap-2">
                   <span>Próxima Pergunta</span>
