@@ -74,8 +74,6 @@ export function BiblicalQuizGame() {
     setIsProcessingAnswer(true);
     setSelectedAnswer(answerIndex);
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
-
     await speak(
       `Você escolheu ${questions[currentQuestion].answers[answerIndex]}. Será que está correta?`,
       true
