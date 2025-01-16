@@ -47,7 +47,8 @@ export function BiblicalQuizGame() {
   const [playCorrect] = useSound("/audios/correct.mp3");
   const [playIncorrect] = useSound("/audios/incorrect.mp3");
 
-  const { speak, speakSequence, speaking, supported, setVoice } = useSpeech();
+  const { speak, speakSequence, speaking, supported, setVoice, setSpeed } =
+    useSpeech();
 
   const readQuestionAndOptions = useCallback(() => {
     if (supported && !showResult) {
@@ -68,7 +69,15 @@ export function BiblicalQuizGame() {
   }, [currentQuestion, gameStarted, readQuestionAndOptions]);
 
   const handleAnswer = async (answerIndex: number) => {
+    await speak(
+      `Você escolheu a resposta: "${questions[currentQuestion].answers[answerIndex]}". Será que está correta?`,
+      true
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     setSelectedAnswer(answerIndex);
+
     setShowCorrectAnswer(true);
 
     if (answerIndex === questions[currentQuestion].correctAnswer) {
@@ -79,7 +88,7 @@ export function BiblicalQuizGame() {
     } else {
       playIncorrect();
       speak(
-        `Incorreto. A resposta correta é ${
+        `Incorreta. A resposta correta é ${
           questions[currentQuestion].answers[
             questions[currentQuestion].correctAnswer
           ]
@@ -121,10 +130,17 @@ export function BiblicalQuizGame() {
     setVoice(voice);
   };
 
+  const handleSpeedChange = (speed: SpeechSynthesisspeed) => {
+    setSpeed(speed);
+  };
+
   if (!gameStarted) {
     return (
       <div className="flex flex-col min-h-screen bg-gray-100">
-        <TitleBar onVoiceChange={handleVoiceChange} />
+        <TitleBar
+          onVoiceChange={handleVoiceChange}
+          onSpeedChange={handleSpeedChange}
+        />
         <div className="flex-grow flex flex-col items-center justify-center p-4">
           <h2 className="text-2xl font-bold mb-4">
             Bem-vindo ao Torta na Cara Bíblico!
@@ -139,7 +155,10 @@ export function BiblicalQuizGame() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <TitleBar onVoiceChange={handleVoiceChange} />
+      <TitleBar
+        onVoiceChange={handleVoiceChange}
+        onSpeedChange={handleSpeedChange}
+      />
       <div className="flex-grow flex flex-col items-center justify-center p-4">
         {showResult ? (
           <div className="text-center">
