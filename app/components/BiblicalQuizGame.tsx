@@ -17,6 +17,7 @@ import { useCommandContext } from "~/providers/CommandProvider";
 import { AiSpeaking } from "./AiSpeaking.client";
 
 type Question = {
+  id: number;
   question: string;
   answers: string[];
   correctAnswer: number;
@@ -79,10 +80,11 @@ const seeAnswerPhrases = [
 
 const youChoosePhrases = ["Você escolheu", "Sua resposta foi"];
 
-function shuffleQuestions(qs: Question[]) {
+function shuffleQuestions(qs: any[]): Question[] {
   const questions = shuffle(qs);
-  questions.map((q) => {
+  questions.map((q, index) => {
     const correctAnswer = q.answers[q.correctAnswer];
+    q.id = index;
     q.answers = shuffle(q.answers);
     q.correctAnswer = q.answers.findIndex((a) => a === correctAnswer);
     return q;
