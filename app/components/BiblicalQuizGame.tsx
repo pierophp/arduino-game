@@ -55,6 +55,22 @@ const wrongAnswerPhrases = [
   "Erro é parte do aprendizado. Vamos tentar mais uma?",
 ];
 
+const seeAnswerPhrases = [
+  "Será que está correta?",
+  "Vamos ver se está certa?",
+  "Vamos descobrir se você acertou!",
+  "Agora é hora de revelar a resposta!",
+  "Curioso para saber se está certo?",
+  "Vamos conferir se sua resposta está correta!",
+  "Hora da verdade, veja se você acertou!",
+  "Vamos ver se você mandou bem!",
+  "Chegou o momento da verdade!",
+  "Está na hora de descobrir sua resposta!",
+  "Será que você acertou? Vamos conferir!",
+  "Hora de saber se você está no caminho certo!",
+  "Vamos ver se você está mandando bem!",
+];
+
 function shuffleQuestions(qs: Question[]) {
   const questions = shuffle(qs);
   questions.map((q) => {
@@ -108,8 +124,11 @@ export function BiblicalQuizGame() {
     setIsProcessingAnswer(true);
     setSelectedAnswer(answerIndex);
 
+    const randomSeePhrase =
+      seeAnswerPhrases[Math.floor(Math.random() * seeAnswerPhrases.length)];
+
     await speak(
-      `Você escolheu ${questions[currentQuestion].answers[answerIndex]}. Será que está correta?`,
+      `Você escolheu ${questions[currentQuestion].answers[answerIndex]}. ${randomSeePhrase}`,
       true
     );
 
