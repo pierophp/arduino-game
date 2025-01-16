@@ -24,6 +24,7 @@ void setup()
   pinMode(greenPin, OUTPUT);
   pinMode(redPin, OUTPUT);
   servo.attach(servoPin);
+  servo.write(servoInitialPos);
 }
 
 void loop()
@@ -63,6 +64,12 @@ void loop()
     if (servoEnabled)
     {
       servo.write(servoFinalPos);
+      delay(1000);
+      for (int pos = servo.read(); pos >= servoInitialPos; pos--)
+      {
+        servo.write(pos);
+        delay(5);
+      }
     }
   }
 
