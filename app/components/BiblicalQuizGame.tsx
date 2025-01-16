@@ -48,6 +48,7 @@ export function BiblicalQuizGame() {
 
   const [playCorrect] = useSound("/audios/correct.mp3");
   const [playIncorrect] = useSound("/audios/incorrect.mp3");
+  const [playFrumRoll] = useSound("/audios/drum_roll.mp3");
 
   const { speak, speakSequence, speaking, supported, setVoice, setSpeed } =
     useSpeech();
@@ -79,7 +80,9 @@ export function BiblicalQuizGame() {
       true
     );
 
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    playFrumRoll();
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
 
     setShowCorrectAnswer(true);
     setIsProcessingAnswer(false);
