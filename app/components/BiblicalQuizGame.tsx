@@ -14,6 +14,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useCommandContext } from "~/providers/CommandProvider";
+import { AiSpeaking } from "./AiSpeaking.client";
 
 type Question = {
   question: string;
@@ -76,7 +77,7 @@ export function BiblicalQuizGame() {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
     await speak(
-      `Você escolheu a resposta: "${questions[currentQuestion].answers[answerIndex]}". Será que está correta?`,
+      `Você escolheu ${questions[currentQuestion].answers[answerIndex]}. Será que está correta?`,
       true
     );
 
@@ -164,6 +165,9 @@ export function BiblicalQuizGame() {
         onVoiceChange={handleVoiceChange}
         onSpeedChange={handleSpeedChange}
       />
+
+      <AiSpeaking speaking={speaking} />
+
       <div className="flex-grow flex flex-col items-center justify-center p-4">
         {showResult ? (
           <div className="text-center">
@@ -181,7 +185,7 @@ export function BiblicalQuizGame() {
               </h2>
               <Button
                 onClick={readQuestionAndOptions}
-                disabled={speaking}
+                disabled={speaking || selectedAnswer !== null}
                 aria-label="Ouvir a pergunta e opções novamente"
                 className="mt-2"
               >
@@ -196,15 +200,15 @@ export function BiblicalQuizGame() {
                   onClick={() => handleAnswer(index)}
                   className={`w-full h-16 text-lg ${
                     isProcessingAnswer && selectedAnswer === index
-                      ? "bg-yellow-500 hover:bg-yellow-600 pulse"
+                      ? "bg-amber-500 hover:bg-amber-600 pulse"
                       : selectedAnswer !== null
                       ? !isProcessingAnswer &&
                         index === questions[currentQuestion].correctAnswer
-                        ? "bg-green-500 hover:bg-green-600"
+                        ? "bg-green-600 hover:bg-green-700"
                         : !isProcessingAnswer && selectedAnswer === index
-                        ? "bg-red-500 hover:bg-red-600"
-                        : "bg-blue-500 hover:bg-blue-600"
-                      : "bg-blue-500 hover:bg-blue-600"
+                        ? "bg-red-600 hover:bg-red-700"
+                        : "bg-blue-600 hover:bg-blue-700"
+                      : "bg-blue-600 hover:bg-blue-700"
                   }`}
                   disabled={selectedAnswer !== null || isProcessingAnswer}
                 >
