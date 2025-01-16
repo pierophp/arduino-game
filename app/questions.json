@@ -273,5 +273,62 @@
     "answers": ["Tiago", "Pedro", "André", "Tomé"],
     "correctAnswer": 0,
     "level": 1
+  },
+  {
+    "question": "Quem escreveu o livro de Apocalipse?",
+    "answers": ["Paulo", "Pedro", "João", "Tiago"],
+    "correctAnswer": 2,
+    "level": 1
+  },
+  {
+    "question": "Onde João estava quando recebeu a visão de Apocalipse?",
+    "answers": ["Jerusalém", "Roma", "Patmos", "Éfeso"],
+    "correctAnswer": 2,
+    "level": 2
+  },
+  {
+    "question": "Quantos anciãos estavam ao redor do trono no céu, conforme visto por João?",
+    "answers": ["7", "12", "24", "144"],
+    "correctAnswer": 2,
+    "level": 3
+  },
+  {
+    "question": "O que o número 666 representa no livro de Apocalipse?",
+    "answers": [
+      "A plenitude de Deus",
+      "A marca da besta",
+      "Os 144.000 escolhidos",
+      "A Nova Jerusalém"
+    ],
+    "correctAnswer": 1,
+    "level": 2
+  },
+  {
+    "question": "Qual o significado da 'Nova Jerusalém' descrita no final de Apocalipse?",
+    "answers": [
+      "Um símbolo da cidade de Jerusalém",
+      "Um governo humano perfeito",
+      "O Reino de Deus",
+      "Um novo templo na terra"
+    ],
+    "correctAnswer": 2,
+    "level": 4
+  },
+  {
+    "question": "O que o 'grande dragão' representa em Apocalipse?",
+    "answers": [
+      "Satanás, o Diabo",
+      "O Reino de Deus",
+      "A morte e o Hades",
+      "O anticristo"
+    ],
+    "correctAnswer": 0,
+    "level": 1
+  },
+  {
+    "question": "Quantos selos foram abertos no livro de Apocalipse antes de serem reveladas as visões dos quatro cavaleiros?",
+    "answers": ["1", "2", "3", "4"],
+    "correctAnswer": 3,
+    "level": 4
   }
 ]

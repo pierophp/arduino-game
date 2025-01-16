@@ -11,6 +11,7 @@ import { AiSpeaking } from "./AiSpeaking.client";
 import { ChildButton } from "./buttons/ChildButton";
 import { TeenButton } from "./buttons/TeenButton";
 import { AdultButton } from "./buttons/AdultButton";
+import { CircuitOverseerButton } from "./buttons/CircuitOverseerButton";
 
 type Level = 1 | 2 | 3 | 4;
 
@@ -95,11 +96,10 @@ function addShownQuestion(level: number, questionId: number) {
   localStorage.setItem(SHOWN_QUESTIONS_KEY, JSON.stringify(shown));
 }
 
-function resetShownQuestions() {
-  localStorage.setItem(
-    SHOWN_QUESTIONS_KEY,
-    JSON.stringify({ 1: [], 2: [], 3: [], 4: [] })
-  );
+function resetShownQuestions(level: Level) {
+  const shown = getShownQuestions();
+  shown[level] = [];
+  localStorage.setItem(SHOWN_QUESTIONS_KEY, JSON.stringify(shown));
 }
 
 function getAvailableQuestions(
@@ -264,14 +264,14 @@ export function BiblicalQuizGame() {
     goToNextQuestion(level);
   };
 
-  const restartGame = () => {
+  const restartGame = (level: Level) => {
     setCurrentQuestion(0);
     setScore(0);
     setShowResult(false);
     setSelectedAnswer(null);
     setShowCorrectAnswer(false);
     setGameStarted(false);
-    resetShownQuestions();
+    resetShownQuestions(level);
   };
 
   const handleVoiceChange = (voice: SpeechSynthesisVoice) => {
@@ -294,10 +294,11 @@ export function BiblicalQuizGame() {
             <h3 className="text-xl font-semibold mb-4 text-center border-b pb-2 flex items-center justify-center gap-2">
               <span>Iniciar Jogo</span>
             </h3>
-            <div className="flex gap-4">
+            <div className="grid grid-cols-2 gap-4 w-[340px]">
               <ChildButton onClick={() => startGame(1)} />
               <TeenButton onClick={() => startGame(2)} />
               <AdultButton onClick={() => startGame(3)} />
+              <CircuitOverseerButton onClick={() => startGame(4)} />
             </div>
           </div>
         </div>
@@ -321,7 +322,11 @@ export function BiblicalQuizGame() {
             <p className="text-xl mb-4">
               Sua pontuação: {score} de {questions.length}
             </p>
-            <Button onClick={restartGame}>Jogar Novamente</Button>
+            <Button
+              onClick={() => restartGame(questions[currentQuestion].level)}
+            >
+              Jogar Novamente
+            </Button>
           </div>
         ) : (
           <>
@@ -381,10 +386,11 @@ export function BiblicalQuizGame() {
                   <span>Próxima Pergunta</span>
                   <ArrowRight className="w-5 h-5" />
                 </h3>
-                <div className="flex gap-4">
+                <div className="grid grid-cols-2 gap-4 w-[600px]">
                   <ChildButton onClick={() => goToNextQuestion(1)} />
                   <TeenButton onClick={() => goToNextQuestion(2)} />
                   <AdultButton onClick={() => goToNextQuestion(3)} />
+                  <CircuitOverseerButton onClick={() => goToNextQuestion(4)} />
                 </div>
               </div>
             )}
