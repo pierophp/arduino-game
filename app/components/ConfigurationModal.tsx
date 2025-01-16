@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { useCommandContext } from "~/providers/CommandProvider";
 
 interface ConfigurationModalProps {
   onVoiceChange: (voice: SpeechSynthesisVoice) => void;
@@ -20,6 +21,7 @@ export function ConfigurationModal({
   onSpeedChange,
 }: ConfigurationModalProps) {
   const [open, setOpen] = useState(false);
+  const { sendCommand } = useCommandContext();
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,6 +40,21 @@ export function ConfigurationModal({
             onVoiceChange={onVoiceChange}
             onSpeedChange={onSpeedChange}
           />
+        </div>
+
+        <div className="py-4 border-t">
+          <h3 className="text-sm font-medium mb-2">Testar Arduino</h3>
+          <div className="flex flex-col gap-2">
+            <Button variant={"default"} onClick={() => sendCommand("1")}>
+              Resposta Certa
+            </Button>
+            <Button variant={"destructive"} onClick={() => sendCommand("2")}>
+              Resposta Errada
+            </Button>
+            <Button variant={"outline"} onClick={() => sendCommand("0")}>
+              Próxima Pergunta
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
