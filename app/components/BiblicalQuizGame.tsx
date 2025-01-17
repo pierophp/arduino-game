@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
-import { Button } from "~/components/ui/button";
-import useSound from "use-sound";
-import { TitleBar } from "./TitleBar";
-import questionsRaw from "../questions.json";
 import shuffle from "lodash/shuffle";
+import { ArrowRight, VolumeIcon as VolumeUp } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import useSound from "use-sound";
+import { Button } from "~/components/ui/button";
 import { useSpeech } from "~/hooks/useSpeech";
-import { VolumeIcon as VolumeUp, ArrowRight } from "lucide-react";
 import { useCommandContext } from "~/providers/CommandProvider";
+import questionsRaw from "../questions.json";
 import { AiSpeaking } from "./AiSpeaking.client";
-import { ChildButton } from "./buttons/ChildButton";
-import { TeenButton } from "./buttons/TeenButton";
 import { AdultButton } from "./buttons/AdultButton";
+import { ChildButton } from "./buttons/ChildButton";
 import { CircuitOverseerButton } from "./buttons/CircuitOverseerButton";
+import { TeenButton } from "./buttons/TeenButton";
+import { TitleBar } from "./TitleBar";
 
 type Level = 1 | 2 | 3 | 4;
 
@@ -148,23 +148,23 @@ export function BiblicalQuizGame() {
   const { speak, speakSequence, speaking, supported, setVoice, setSpeed } =
     useSpeech();
 
-  const readQuestionAndOptions = useCallback(() => {
-    if (supported && !showResult) {
+  const readQuestionAndOptions = useCallback(
+    (cq: number) => {
+      if (!supported) {
+        return;
+      }
+
       const textsToSpeak = [
-        questions[currentQuestion].question,
-        ...questions[currentQuestion].answers.map(
+        questions[cq].question,
+        ...questions[cq].answers.map(
           (answer, index) => `Opção ${index + 1}: ${answer}`
         ),
       ];
-      speakSequence(textsToSpeak, 0);
-    }
-  }, [currentQuestion, showResult, speakSequence, supported]);
 
-  useEffect(() => {
-    if (gameStarted) {
-      readQuestionAndOptions();
-    }
-  }, [currentQuestion, gameStarted, readQuestionAndOptions]);
+      speakSequence(textsToSpeak, 0);
+    },
+    [speakSequence, supported]
+  );
 
   const handleAnswer = async (answerIndex: number) => {
     setIsProcessingAnswer(true);
@@ -188,7 +188,7 @@ export function BiblicalQuizGame() {
 
     playDrumRoll();
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     setShowCorrectAnswer(true);
     setIsProcessingAnswer(false);
@@ -253,6 +253,7 @@ export function BiblicalQuizGame() {
 
     if (nextQuestionIndex !== -1) {
       setCurrentQuestion(nextQuestionIndex);
+      readQuestionAndOptions(nextQuestionIndex);
     } else {
       setShowResult(true);
       await speak(`A pontuação foi ${score} de ${questions.length}`);
@@ -265,12 +266,10 @@ export function BiblicalQuizGame() {
   };
 
   const restartGame = (level: Level) => {
-    setCurrentQuestion(0);
     setScore(0);
     setShowResult(false);
     setSelectedAnswer(null);
     setShowCorrectAnswer(false);
-    setGameStarted(false);
     resetShownQuestions(level);
   };
 
@@ -335,7 +334,7 @@ export function BiblicalQuizGame() {
                 {questions[currentQuestion].question}
               </h2>
               <Button
-                onClick={readQuestionAndOptions}
+                onClick={() => readQuestionAndOptions(currentQuestion)}
                 disabled={speaking || selectedAnswer !== null}
                 aria-label="Ouvir a pergunta e opções novamente"
                 className="mt-2"
@@ -349,7 +348,7 @@ export function BiblicalQuizGame() {
                 <Button
                   key={index}
                   onClick={() => handleAnswer(index)}
-                  className={`w-full h-16 text-lg ${
+                  className={`w-full h-12 text-lg text-left ${
                     isProcessingAnswer && selectedAnswer === index
                       ? "bg-amber-500 hover:bg-amber-600 pulse"
                       : selectedAnswer !== null

@@ -9,7 +9,7 @@ export function TeenButton({ onClick }: TeenButtonProps) {
   return (
     <Button
       onClick={onClick}
-      className="flex-1 items-center gap-2 bg-lime-600 hover:bg-lime-700"
+      className="flex-1 items-center h-10 gap-2 bg-lime-600 hover:bg-lime-700"
     >
       <ScanFace className="w-5 h-5" />
       Jovem

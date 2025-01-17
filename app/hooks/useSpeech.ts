@@ -33,7 +33,11 @@ export function useSpeech() {
   }
 
   const speak = useCallback(
-    (text: string, waitForCompletion: boolean = false): Promise<void> => {
+    (
+      text: string,
+      waitForCompletion: boolean = false,
+      changeSpeaking = true
+    ): Promise<void> => {
       if (!supported) return Promise.resolve();
 
       return new Promise((resolve) => {
@@ -46,9 +50,15 @@ export function useSpeech() {
         }
         utterance.lang = "pt-BR";
         utterance.rate = speed;
-        utterance.onstart = () => setSpeaking(true);
+        utterance.onstart = () => {
+          if (changeSpeaking) {
+            setSpeaking(true);
+          }
+        };
         utterance.onend = () => {
-          setSpeaking(false);
+          if (changeSpeaking) {
+            setSpeaking(false);
+          }
           resolve();
         };
 
@@ -69,7 +79,7 @@ export function useSpeech() {
       window.speechSynthesis.cancel();
 
       for (let i = 0; i < texts.length; i++) {
-        await speak(texts[i], true);
+        await speak(texts[i], true, false);
         if (i < texts.length - 1) {
           await new Promise((resolve) => setTimeout(resolve, pauseDuration));
         }
@@ -84,7 +94,6 @@ export function useSpeech() {
     setSelectedVoice(voice);
   }, []);
 
-  // Add a function to control the speed
   const setSpeechSpeed = useCallback((newSpeed: number) => {
     setSpeed(newSpeed);
   }, []);
