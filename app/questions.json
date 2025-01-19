@@ -330,5 +330,70 @@
     "answers": ["1", "2", "3", "4"],
     "correctAnswer": 3,
     "level": 4
+  },
+  {
+    "question": "Quem foi a mulher que se tornou rainha da Pérsia e salvou seu povo?",
+    "answers": ["Ester", "Rute", "Débora", "Miriã"],
+    "correctAnswer": 0,
+    "level": 1
+  },
+  {
+    "question": "Quem foi o líder que conduziu os israelitas na conquista de Jericó?",
+    "answers": ["Josué", "Moisés", "Calebe", "Gideão"],
+    "correctAnswer": 0,
+    "level": 1
+  },
+  {
+    "question": "Quem foi a mulher moabita que se tornou ancestral do rei Davi?",
+    "answers": ["Rute", "Ester", "Ana", "Débora"],
+    "correctAnswer": 0,
+    "level": 2
+  },
+  {
+    "question": "Quem foi o juiz de Israel conhecido por sua força extraordinária?",
+    "answers": ["Sansão", "Gideão", "Jefté", "Eúde"],
+    "correctAnswer": 0,
+    "level": 1
+  },
+  {
+    "question": "Quem foi o rei que pediu sabedoria a Deus para governar Israel?",
+    "answers": ["Salomão", "Davi", "Saul", "Ezequias"],
+    "correctAnswer": 0,
+    "level": 1
+  },
+  {
+    "question": "Qual o nome do anjo que visitou Maria?",
+    "answers": ["Gabriel", "Miguel", "Rafael", "Uriel"],
+    "correctAnswer": 0,
+    "level": 1
+  },
+  {
+    "question": "Quem escreveu o livro de Apocalipse?",
+    "answers": ["João", "Paulo", "Pedro", "Tiago"],
+    "correctAnswer": 0,
+    "level": 1
+  },
+  {
+    "question": "Quantos livros tem a Bíblia?",
+    "answers": ["66", "60", "64", "62"],
+    "correctAnswer": 0,
+    "level": 2
+  },
+  {
+    "question": "Qual profeta predisse que o Reino esmagaria todos os outros reinos?",
+    "answers": ["Daniel", "Isaías", "Jeremias", "Ezequiel"],
+    "correctAnswer": 0,
+    "level": 2
+  },
+  {
+    "question": "Que evento marcou a entronização de Jesus como Rei no céu?",
+    "answers": [
+      "Sua ressurreição",
+      "Sua ascensão",
+      "A grande guerra celestial",
+      "A pregação das boas novas"
+    ],
+    "correctAnswer": 3,
+    "level": 2
   }
 ]
